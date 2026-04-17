@@ -91,6 +91,10 @@ Hi there! I'm **Rockermaze**, a passionate developer who thrives on creating inn
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Rockermaze&theme=radical" alt="GitHub Streak" />
 </div>
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-snake.svg" alt="Snake animation" />
+</div>
+
 ---
 
 ## 🔄 Recent Activity
@@ -99,6 +103,13 @@ Hi there! I'm **Rockermaze**, a passionate developer who thrives on creating inn
 - 📚 Exploring advanced deep learning architectures
 - 🤝 Open to collaborations on innovative tech solutions
 - 💡 Always learning and pushing boundaries in tech
+
+---
+
+## 📝 Recent Commits
+
+- **Update profile README with creative tech stack and projects showcase** - Showcasing AI expertise and projects
+- *More commits will be listed here as they happen*
 
 ---
 
