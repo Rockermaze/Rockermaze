@@ -91,8 +91,25 @@ Hi there! I'm **Rockermaze**, a passionate developer who thrives on creating inn
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Rockermaze&theme=radical" alt="GitHub Streak" />
 </div>
 
+---
+
+## � Yearly Commit Graph with Snake
+
+*GitHub-style contribution calendar with an animated snake navigating through your yearly commits!*
+
+🔗 **[View Interactive Yearly Commits](yearly-commits.html)** - See all your commits across years with the snake traversing through them  
+📊 Color intensity shows commit activity  
+🐍 Watch the snake move across your contribution graph  
+📈 Hover for detailed commit stats on each day
+
+---
+
+## �🐍 Commit Snake Journey
+
+*Watch the snake navigate through your commits as obstacles!*
+
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-snake.svg" alt="Snake animation" />
+  <img src="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-snake.svg" alt="Snake navigating through commits" />
 </div>
 
 ---
@@ -106,10 +123,48 @@ Hi there! I'm **Rockermaze**, a passionate developer who thrives on creating inn
 
 ---
 
-## 📝 Recent Commits
+## 📝 Commit History & Obstacles
 
-- **Update profile README with creative tech stack and projects showcase** - Showcasing AI expertise and projects
-- *More commits will be listed here as they happen*
+```
+🐍 Snake Navigating Through Commits:
+
+┌─────────────────────────────────────────┐
+│ 📍 Commit #2 - Add snake animation      │
+│    workflow and recent commits section  │
+│                          [NAVIGATING]   │
+├─────────────────────────────────────────┤
+│ 📍 Commit #1 - Update profile README    │
+│    with creative tech stack and         │
+│    projects showcase                    │
+│                          [CLEARED ✓]    │
+└─────────────────────────────────────────┘
+```
+
+### 📊 Commit Statistics
+
+| Metric | Count |
+|--------|-------|
+| 🔗 Total Commits | 2+ |
+| 🎯 Active Days | Growing |
+| 💡 Code Changes | Stack Showcase |
+| 🚀 Latest Update | Snake Integration |
+
+### 🎮 Play Commit Snake Game
+**Navigate the snake through your commit obstacles!**  
+Control the snake with arrow keys ⬆️⬇️⬅️➡️  
+Avoid commit markers and collect power-ups!
+
+🔗 **[Open Interactive Game](commit-snake-viz.html)** | Move the snake, grow longer, and reach new commits!
+
+
+---
+
+## 🎮 How the Snake Game Works
+
+🐍 **The snake continuously moves** through your GitHub contribution graph  
+📍 **Each commit becomes an obstacle** the snake must avoid  
+🎯 **The animation loops** showing your contribution pattern  
+⚡ **Updates daily** with new commits
 
 ---
 

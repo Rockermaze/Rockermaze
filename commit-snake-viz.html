@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rockermaze - Commit Snake Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+        }
+        
+        .container {
+            padding: 40px;
+            max-width: 900px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #a855f7;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        
+        p {
+            color: #b0b0b0;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        canvas {
+            border: 2px solid #a855f7;
+            border-radius: 10px;
+            background: #0f0f1e;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .stat-box {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid #a855f7;
+            padding: 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-label {
+            color: #b0b0b0;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            color: #a855f7;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            text-align: left;
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #a855f7;
+        }
+        
+        .legend-item {
+            margin: 10px 0;
+        }
+        
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 3px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐍 Commit Snake Game</h1>
+        <p>Watch the snake navigate through your commits as obstacles</p>
+        
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">🔗 Total Commits</div>
+                <div class="stat-value" id="totalCommits">2+</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">🎯 Score</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">✨ Collected</div>
+                <div class="stat-value" id="collected">0</div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color" style="background: #22c55e;"></span>
+                <span>🐍 Snake (Growing with commits)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #f97316;"></span>
+                <span>📍 Commits (Obstacles)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #a855f7;"></span>
+                <span>⭐ Power-ups</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const gridSize = 20;
+        const gridWidth = Math.floor(canvas.width / gridSize);
+        const gridHeight = Math.floor(canvas.height / gridSize);
+        
+        // Snake
+        let snake = [{ x: 5, y: 5 }];
+        let direction = { x: 1, y: 0 };
+        let nextDirection = { x: 1, y: 0 };
+        let score = 0;
+        let collected = 0;
+        
+        // Commits as obstacles
+        const commits = [
+            { x: 15, y: 10, label: "README" },
+            { x: 25, y: 15, label: "SNAKE" },
+            { x: 20, y: 25, label: "WORKFLOW" },
+            { x: 10, y: 20, label: "UPDATE" }
+        ];
+        
+        // Food/power-ups
+        let food = {
+            x: Math.floor(Math.random() * gridWidth),
+            y: Math.floor(Math.random() * gridHeight)
+        };
+        
+        function generateFood() {
+            let newFood;
+            let valid = false;
+            while (!valid) {
+                newFood = {
+                    x: Math.floor(Math.random() * gridWidth),
+                    y: Math.floor(Math.random() * gridHeight)
+                };
+                // Check not on snake or commits
+                valid = !snake.some(s => s.x === newFood.x && s.y === newFood.y) &&
+                        !commits.some(c => c.x === newFood.x && c.y === newFood.y);
+            }
+            food = newFood;
+        }
+        
+        function update() {
+            direction = nextDirection;
+            
+            const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+            
+            // Wrap around
+            head.x = (head.x + gridWidth) % gridWidth;
+            head.y = (head.y + gridHeight) % gridHeight;
+            
+            // Check collision with commits
+            for (let commit of commits) {
+                if (head.x === commit.x && head.y === commit.y) {
+                    // Bounce back
+                    direction = { x: -direction.x, y: -direction.y };
+                    head.x = snake[0].x + direction.x;
+                    head.y = snake[0].y + direction.y;
+                    break;
+                }
+            }
+            
+            snake.unshift(head);
+            
+            // Check food collision
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                collected++;
+                document.getElementById('score').textContent = score;
+                document.getElementById('collected').textContent = collected;
+                generateFood();
+            } else {
+                snake.pop();
+            }
+            
+            // Check self collision
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    // Reset to initial state
+                    snake = [{ x: 5, y: 5 }];
+                    score = 0;
+                    document.getElementById('score').textContent = score;
+                }
+            }
+        }
+        
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#0f0f1e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.1)';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i <= gridWidth; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * gridSize, 0);
+                ctx.lineTo(i * gridSize, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= gridHeight; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, i * gridSize);
+                ctx.lineTo(canvas.width, i * gridSize);
+                ctx.stroke();
+            }
+            
+            // Draw food
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.arc(
+                (food.x + 0.5) * gridSize,
+                (food.y + 0.5) * gridSize,
+                gridSize / 3,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+            
+            // Draw commits
+            commits.forEach(commit => {
+                ctx.fillStyle = '#f97316';
+                ctx.shadowColor = 'rgba(249, 115, 22, 0.5)';
+                ctx.shadowBlur = 10;
+                ctx.fillRect(
+                    commit.x * gridSize + 2,
+                    commit.y * gridSize + 2,
+                    gridSize - 4,
+                    gridSize - 4
+                );
+                ctx.shadowColor = 'transparent';
+            });
+            
+            // Draw snake
+            snake.forEach((segment, index) => {
+                if (index === 0) {
+                    // Head
+                    ctx.fillStyle = '#22c55e';
+                    ctx.shadowColor = 'rgba(34, 197, 94, 0.7)';
+                    ctx.shadowBlur = 10;
+                } else {
+                    // Body
+                    ctx.fillStyle = `rgba(34, 197, 94, ${1 - index / snake.length})`;
+                    ctx.shadowColor = 'transparent';
+                }
+                ctx.fillRect(
+                    segment.x * gridSize + 1,
+                    segment.y * gridSize + 1,
+                    gridSize - 2,
+                    gridSize - 2
+                );
+            });
+            ctx.shadowColor = 'transparent';
+        }
+        
+        function gameLoop() {
+            update();
+            draw();
+            setTimeout(gameLoop, 100);
+        }
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' && direction.y === 0) nextDirection = { x: 0, y: -1 };
+            if (e.key === 'ArrowDown' && direction.y === 0) nextDirection = { x: 0, y: 1 };
+            if (e.key === 'ArrowLeft' && direction.x === 0) nextDirection = { x: -1, y: 0 };
+            if (e.key === 'ArrowRight' && direction.x === 0) nextDirection = { x: 1, y: 0 };
+        });
+        
+        // Start game
+        gameLoop();
+    </script>
+</body>
+</html>
