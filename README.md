@@ -93,7 +93,23 @@ Hi there! I'm **Rockermaze**, a passionate developer who thrives on creating inn
 
 ---
 
-## � Yearly Commit Graph with Snake
+## 🐍 Contribution Snake
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-contribution-grid-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-contribution-grid-snake.svg" />
+  <img alt="🐍 contribution snake" src="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-contribution-grid-snake-dark.svg" width="100%"/>
+</picture>
+
+</div>
+
+*Watch the snake eat through your contribution graph! Light & dark mode compatible 🌙☀️*
+
+---
+
+## 📅 Yearly Commit Graph with Snake
 
 *GitHub-style contribution calendar with an animated snake navigating through your yearly commits!*
 
@@ -104,15 +120,6 @@ Hi there! I'm **Rockermaze**, a passionate developer who thrives on creating inn
 
 ---
 
-## �🐍 Commit Snake Journey
-
-*Watch the snake navigate through your commits as obstacles!*
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Rockermaze/Rockermaze/output/github-snake.svg" alt="Snake navigating through commits" />
-</div>
-
----
 
 ## 🔄 Recent Activity
 
